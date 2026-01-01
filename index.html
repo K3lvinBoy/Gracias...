@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Especial para Ti</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+    --primario: #ffffff;
+    --fondo: #FDF2F8;
+
+    /* COLOR DEL SOBRE */
+    --fondo-sobre: #8B0836;
+    --solapa-sobre: #8B0836;
+    --cuerpo-sobre: #4D0218;
+;
+
+    --sombra: rgba(0, 0, 0, 0.25);
+
+    --texto: #020618;
+    --dorado: #020618;
+    --rojo: #8A0194;
+}
+
+
+
+        body {
+            background: var(--fondo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: "Pacifico", cursive;
+            font-size: 44px;
+            margin-bottom: 30px;
+            color: #020618;
+        }
+
+        .contenedor {
+            width: 400px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .envoltura-sobre {
+            position: relative;
+            background-color: var(--fondo-sobre);
+            box-shadow: 0 15px 40px var(--sombra);
+            border-radius: 12px;
+        }
+
+        .sobre {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            cursor: pointer;
+        }
+
+        .sobre::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 4;
+            border-top: 180px solid var(--solapa-sobre);
+            border-right: 200px solid transparent;
+            border-left: 200px solid transparent;
+            transform-origin: top;
+            transition: all 0.5s ease-in-out 0.7s;
+            border-radius: 12px;
+        }
+
+        .solapa-derecha,
+        .solapa-izquierda {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cuerpo-sobre);
+            border-radius: 12px;
+        }
+
+        .solapa-derecha {
+            clip-path: polygon(100% 0, 0 100%, 100% 100%);
+        }
+
+        .solapa-izquierda {
+            clip-path: polygon(0 0, 0 100%, 100% 100%);
+        }
+
+        .carta {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primario);
+            box-shadow: 0 10px 30px var(--sombra);
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .contenido {
+            font-family: "Georgia", serif;
+            color: var(--texto);
+            text-align: left;
+            font-size: 16px;
+            border: 2px dashed var(--dorado);
+            padding: 15px;
+            height: 100%;
+            line-height: 1.6;
+            overflow-y: auto;
+            background: #fffdf7;
+        }
+
+        .contenido strong {
+            color: var(--rojo);
+        }
+
+        .spider-sello {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 45px;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            cursor: pointer;
+            transition: transform 0.5s ease-in-out 1s;
+        }
+
+        .abierto .sobre::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .abierto .spider-sello {
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+
+        .carta.mostrar-carta {
+            transform: translateY(-290px);
+        }
+
+        .carta.cerrando-carta {
+            transform: translateY(-290px);
+        }
+
+        .carta.abierta {
+            z-index: 10000;
+        }
+
+        .envoltura-sobre.desactivar-sobre .sobre::before {
+            pointer-events: none;
+        }
+
+      .rosa {
+    position: fixed;
+    bottom: -60px;
+    font-size: 26px;
+    opacity: 0.85;
+    animation: flotar linear infinite;
+    pointer-events: none;
+    z-index: 1;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+
+@keyframes flotar {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-120vh);
+    }
+}
+
+
+
+        /* 📱 RESPONSIVE PARA CELULARES */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+        height: auto;
+    }
+
+    h1 {
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .sobre {
+        width: 320px;
+        height: 240px;
+    }
+
+    .envoltura-sobre {
+        border-radius: 10px;
+    }
+
+    .sobre::before {
+        border-top: 140px solid var(--solapa-sobre);
+        border-right: 160px solid transparent;
+        border-left: 160px solid transparent;
+    }
+
+    .carta {
+        padding: 12px;
+    }
+
+    .contenido {
+        font-size: 14px;
+        padding: 12px;
+        line-height: 1.5;
+    }
+
+    .spider-sello {
+        width: 35px;
+    }
+
+    /* Ajuste de subida de carta */
+    .carta.mostrar-carta,
+    .carta.cerrando-carta {
+        transform: translateY(-230px);
+    }
+}
+/* 📱 RESPONSIVE PARA CELULARES */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .sobre {
+        width: 320px;
+        height: 240px;
+    }
+
+    .sobre::before {
+        border-top: 140px solid var(--solapa-sobre);
+        border-right: 160px solid transparent;
+        border-left: 160px solid transparent;
+    }
+
+    .carta {
+        padding: 12px;
+    }
+
+    .contenido {
+        font-size: 14px;
+        padding: 12px;
+        line-height: 1.5;
+    }
+
+    .spider-sello {
+        width: 35px;
+    }
+
+    .carta.mostrar-carta,
+    .carta.cerrando-carta {
+        transform: translateY(-230px);
+    }
+}
+
+.imagen-final {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.imagen-final img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.titulo-feliz {
+    font-family: "Playfair Display", "Georgia", serif;
+    font-size: 30px;
+    letter-spacing: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* movimiento suave */
+@keyframes flotar-titulo {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
+
+/* colores RGB */
+@keyframes rgbTitulo {
+    0%   { color: rgb(255, 80, 80); }
+    33%  { color: rgb(80, 255, 180); }
+    66%  { color: rgb(80, 150, 255); }
+    100% { color: rgb(255, 80, 80); }
+}
+
+
+    </style>
+</head>
+
+<body>
+
+<h1 class="titulo-globos titulo-feliz">
+    "Carta Especial para Ti"
+</h1>
+
+
+
+
+
+<div class="contenedor">
+    <div class="envoltura-sobre">
+        <div class="sobre">
+            <div class="solapa-derecha"></div>
+            <div class="solapa-izquierda"></div>
+            <img src="123445.png" class="spider-sello">
+        </div>
+
+        <div class="carta">
+            <<div class="contenido">
+    <p>
+        <strong>Mi bella Ericka…</strong><br><br>
+
+        Llegaste a mi vida cuando aún no sabía<br>
+        qué significaba <strong>amar</strong>.<br>
+        Lo que nació como un <strong>cariño inocente</strong><br>
+        se volvió la <strong>raíz</strong> de todo lo que vendría después.<br>
+        Nunca imaginé que ese primer <strong>latido</strong><br>
+        sería un <strong>lazo invisible</strong>,<br>
+        uno que el <strong>tiempo</strong> no lograría romper,<br>
+        aunque la vida intentara llevarnos<br>
+        por <strong>caminos distintos</strong>.<br><br>
+
+        El mundo puede volverse <strong>pesado</strong>, <strong>injusto</strong>, <strong>confuso</strong>…<br>
+        pero contigo cerca todo se vuelve más <strong>llevadero</strong>.<br>
+        No porque soluciones mis problemas,<br>
+        sino porque tu sola <strong>existencia</strong><br>
+        me recuerda que aún hay <strong>luz</strong><br>
+        después de cada <strong>caída</strong>.<br>
+        Contigo, los <strong>momentos simples</strong> se vuelven eternos<br>
+        y los <strong>silencios</strong> hablan<br>
+        más que cualquier palabra.<br><br>
+
+        Somos dos personas intentando <strong>sobrevivir</strong>,<br>
+        pero juntas aprendimos a encontrar <strong>fuerza</strong><br>
+        donde antes solo había <strong>vacío</strong>.<br>
+        Hay algo en ti que no existe en nadie más,<br>
+        una <strong>familiaridad</strong> que me abraza el alma<br>
+        y me recuerda que, pase lo que pase,<br>
+        tú sigues siendo mi <strong>lugar seguro</strong>.<br><br>
+
+        Hoy deseo que todo lo que hagas<br>
+        te acerque un poco más a tus <strong>sueños</strong>.<br>
+        Que no te falte el <strong>ánimo</strong><br>
+        ni la <strong>confianza</strong> para enfrentarlo todo.<br>
+        Confía en ti,<br>
+        como <strong>yo confío en ti</strong>.<br>
+        Que no te falte la <strong>fe</strong>, la <strong>calma</strong><br>
+        ni esa <strong>sonrisa</strong> tan hermosa<br>
+        que sin darse cuenta<br>
+        se volvió mi <strong>lugar favorito</strong>.<br><br>
+
+        Sé que la vida no siempre es justa<br>
+        con los <strong>amores verdaderos</strong>.<br>
+        Vendrán <strong>pruebas</strong>, <strong>distancias</strong> y <strong>silencios</strong>,<br>
+        momentos donde el <strong>miedo</strong> intente borrar lo nuestro.<br>
+        Pero incluso si la <strong>memoria</strong> duda,<br>
+        tu <strong>corazón</strong> sabrá reconocerme.<br>
+        En una <strong>mirada</strong>, en un gesto involuntario,<br>
+        en esa <strong>conexión inexplicable</strong><br>
+        que siempre ha sido <strong>nuestra</strong>.<br><br>
+
+        Amarte es subir una <strong>escalera interminable</strong>:<br>
+        <strong>El amarte es infinito, no hay fin</strong>.<br>
+        Porque tu amor <strong>transforma</strong>, <strong>purifica</strong>,<br>
+        enseña que incluso en el <strong>sufrimiento</strong><br>
+        existe <strong>belleza</strong><br>
+        cuando se elige a la <strong>misma persona</strong><br>
+        una y otra vez.<br><br>
+
+        Aprendí que amar no es <strong>aferrarse</strong>,<br>
+        es <strong>sostener</strong> incluso cuando las manos tiemblan.<br>
+        Es <strong>creer</strong> cuando todo parece imposible.<br>
+        Es confiar en que, si dos <strong>corazones</strong> están destinados,<br>
+        el tiempo solo los pone a <strong>prueba</strong>,<br>
+        pero nunca los separa del todo.<br><br>
+
+        Si algo me deja este año<br>
+        es la certeza de que <strong>contigo quiero seguir caminando</strong>.<br>
+        Porque nuestro amor no se quedó quieto:<br>
+        <strong>evolucionó</strong>, <strong>maduró</strong><br>
+        y aprendió a sostenerse<br>
+        con <strong>respeto</strong>, <strong>paciencia</strong><br>
+        y mucha <strong>entrega</strong>.<br>
+        Gracias por <strong>quedarte</strong>,<br>
+        por <strong>enseñarme</strong>,<br>
+        por <strong>creer en nosotros</strong><br>
+        incluso cuando no fue fácil.<br><br>
+
+        Gracias por <strong>existir</strong>,<br>
+        por dejarme ser parte de tu <strong>vida</strong>,<br>
+        por tu amor tan <strong>puro</strong>.<br>
+        Te amo más de lo que las palabras<br>
+        alcanzan a <strong>decir</strong>.<br><br>
+
+        Hoy empieza un <strong>nuevo año</strong>,<br>
+        y lo recibo con <strong>ilusión</strong><br>
+        porque sé que a tu lado<br>
+        puede ser aún más <strong>hermoso</strong>.<br>
+        Prometo seguir <strong>creciendo contigo</strong>,<br>
+        cuidarte, escucharte<br>
+        y <strong>amarte cada día mejor</strong>.<br>
+        Que este nuevo año<br>
+        nos encuentre más <strong>unidos</strong>,<br>
+        más <strong>conscientes</strong><br>
+        y más <strong>enamorados</strong> que nunca.<br><br>
+
+        Porque hay amores que solo nacen<br>
+        una vez en la <strong>vida</strong>.<br>
+        Y tú eres ese <strong>amor</strong>.<br>
+        El que llegó antes de que entendiera su significado.<br>
+        El que resistió <strong>golpes</strong>, <strong>pérdidas</strong> y <strong>silencios</strong>.<br>
+        El que elegiría de nuevo,<br>
+        en este tiempo, en cualquier otro<br>
+        y en <strong>todas las vidas</strong> que pudieran existir.<br><br>
+
+        <strong>Con todo mi amor y cariño,</strong><br>
+        <strong>Att. Keto</strong>
+    </p>
+</div>
+
+
+
+                   
+        </div>
+    </div>
+</div>
+
+
+<audio id="musica" loop>
+    <source src="345.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const envoltura = document.querySelector(".envoltura-sobre");
+    const carta = document.querySelector(".carta");
+    const musica = document.getElementById("musica");
+
+    let abierto = false;
+
+    document.addEventListener("click", (e) => {
+
+        /* ABRIR SOBRE */
+        if (
+            !abierto &&
+            (
+                e.target.matches(".sobre") ||
+                e.target.matches(".solapa-derecha") ||
+                e.target.matches(".solapa-izquierda") ||
+                e.target.matches(".spider-sello")
+            )
+        ) {
+            musica.play().catch(() => {});
+
+            envoltura.classList.add("abierto");
+            envoltura.classList.add("desactivar-sobre");
+
+            setTimeout(() => {
+                carta.style.display = "block";
+                carta.classList.add("mostrar-carta");
+
+                setTimeout(() => {
+                    carta.classList.remove("mostrar-carta");
+                    carta.classList.add("abierta");
+                    abierto = true;
+                }, 500);
+            }, 1000);
+        }
+
+        /* CERRAR CARTA Y SOBRE */
+        else if (abierto) {
+            carta.classList.add("cerrando-carta");
+
+            setTimeout(() => {
+                carta.classList.remove("cerrando-carta");
+                carta.classList.remove("abierta");
+                carta.style.display = "none";
+
+                envoltura.classList.remove("abierto");
+                envoltura.classList.remove("desactivar-sobre");
+
+                abierto = false;
+            }, 500);
+        }
+    });
+
+    /* 🎈 GLOBOS 🎈 */
+function crearRosa() {
+    const rosa = document.createElement("div");
+    rosa.className = "rosa";
+    rosa.textContent = "🌹";
+    rosa.style.left = Math.random() * window.innerWidth + "px";
+    rosa.style.animationDuration = 12 + Math.random() * 8 + "s";
+    rosa.style.fontSize = 22 + Math.random() * 18 + "px";
+    document.body.appendChild(rosa);
+
+    setTimeout(() => rosa.remove(), 22000);
+}
+
+setInterval(crearRosa, 900);
+
+</script>
+
+
+
+
+
+</body>
+</html>
